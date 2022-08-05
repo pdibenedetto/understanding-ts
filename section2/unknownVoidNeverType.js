@@ -1,5 +1,6 @@
-var userInput; // type any would compile
-var userName;
+"use strict";
+let userInput; // type any would compile
+let userName;
 userInput = 5;
 userInput = 'Hi';
 if (typeof userInput === 'string') { // Javascript type check solves the compilation issue
@@ -14,3 +15,4 @@ function neverReturned(message, code) {
 }
 generateError('An error occured!', 500);
 // Somewhat a generic error generator a big app could use
+//# sourceMappingURL=unknownVoidNeverType.js.map

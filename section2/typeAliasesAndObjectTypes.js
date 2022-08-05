@@ -1,4 +1,5 @@
-var user1 = { name: 'Walnuts', age: 39 };
+"use strict";
+const user1 = { name: 'Walnuts', age: 39 };
 function greet(user) {
     console.log('Hi, I am ' + user.name);
 }
@@ -13,5 +14,6 @@ function greetSimple(user) {
 function isOlderSimple(user, checkAge) {
     return checkAge > user.age;
 }
-var u1 = { name: 'Max' };
+let u1 = { name: 'Max' };
 u1 = 'Mike';
+//# sourceMappingURL=typeAliasesAndObjectTypes.js.map
