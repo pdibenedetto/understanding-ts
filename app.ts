@@ -1,75 +1,116 @@
-class Department {
-  // private id: string;
-  // private name: string;
-  protected employees: string[] = [];
+type Admin = {
+    name: string;
+    privileges: string[];
+};
 
-  // constructor(id: string, name: string) {
-  //   this.id = id;
-  //   this.name = name;
-  // }
+type Employee = {
+    name : string;
+    startDate: Date;
+};
 
-  // Shortcut, short initialization (almost like lombok)
-  constructor(private readonly id: string, public name: string) {} // readonly - final in java
+type ElevatedEmployee = Admin & Employee;
 
-  describe(this: Department) {
-    // Extra type saftey, which will mandate a 'name' property
-    console.log("Department: " + this.name);
-  }
+const elevatedEmployee = {
+    name: 'Paul',
+    priviliges: ['aws-ec2'],
+    startDate: new Date()
+};
 
-  addEmployee(employee: string) {
-    this.employees.push(employee);
-  }
+type Combinable1 = string | number;
+type Numeric = number | boolean;
 
-  printEmployeeInformation() {
-    console.log(this.employees.length);
-    console.log(this.employees);
-  }
+type Universal = Combinable1 & Numeric;
+
+// Function overload
+function add1(a: string, b: string): string
+function add1(a: number, b: number): number
+function add1(a: Combinable1, b: Combinable1) {
+    if(typeof a ==='string' || typeof b === 'string'){      // type guard example        
+        return a.toString() + b.toString();
+    }
+    return a + b;
 }
 
-class ITDepartment extends Department {
+// Function overloads helps infer the type returned by the method
+const result = add1('Paul', ' DiBenedetto')
+result.split(' ')
 
-  constructor(id: string, public adminds: string[]) {
-    super(id, 'Information Technology')
-  }
 
-  addEmployee(employee: string): void {
-    if (employee === 'pdibenedetto') return
-    else this.employees.push(employee)
-  }
-
+// Optional Chaining
+const fetchedUserData = {
+    id: 'u1',
+    name: 'Paul',
+    job: {title: 'CEO', description: 'My own company'}
 }
 
-class AccountingDepartment extends Department {
-  constructor(id: string, private reports: string[]) {
-    super(id, 'Accounting')
-  }
+// Vanilla javascript checking
+// console.log(fetchedUserData.job && fetchedUserData.job.title)
 
-  addReports(report: string) {
-    this.reports.push(report)
-  }
+console.log(fetchedUserData?.job?.title)
 
-  printReports() {
-    console.log(this.reports)
-  }
-}
+// Nullish data - Nullish Coalescing
 
-const accounting = new AccountingDepartment('d1', []);
-accounting.addEmployee('Mike')
-accounting.addEmployee('Johnny')
-accounting.describe();
-accounting.printReports();
+// const uInput = '';
+// const storedData = userInput || 'Default';
+// console.log(storedData); // this will go to the 'Default'
+
+const uInput = '';
+const storedData = userInput ?? 'Default';
+console.log(storedData); 
 
 
-const accountingCopy = { describe: accounting.describe };
-console.log(accounting);
-// accountingCopy.describe();
-accounting.addReports('Reporting an issue')
 
 
-const itDepartment = new ITDepartment('d2', ['pdibenedetto'])
-itDepartment.addEmployee('Mike')
-itDepartment.addEmployee('Johnson')
-itDepartment.addEmployee('pdibenedetto')
-itDepartment.describe()
-itDepartment.printEmployeeInformation()
-console.log(itDepartment)
+
+
+// type UnknownEmployee = Employee | Admin;
+
+// function printEmployeeInformation(emp: UnknownEmployee) {
+//     console.log('Name: ' + emp.name);
+//     if('privileges' in emp){
+//         console.log('Privileges : ' + emp.privileges)
+//     }
+// }
+
+// interface Bird {
+//     type: 'bird';
+//     flyingSpeed: number;
+// }
+
+// interface Horse {
+//     type: 'horse';
+//     runningSpeed: number
+// }
+
+// type Animal = Bird | Horse;
+
+// function moveAnimal(animal: Animal) {
+//     let speed;
+//     switch(animal.type) {
+//         case 'bird' :
+//             speed = animal.flyingSpeed;
+//             break;
+//         case 'horse' :
+//             speed = animal.runningSpeed;
+//             break;
+//     }
+//     console.log('Moving at speed: ' + speed);
+// }
+
+// moveAnimal({type: 'bird', flyingSpeed: 10})
+
+// // const userInputElement = <HTMLInputElement>document.getElementById('user-input');
+// // or
+// const userInputElement = document.getElementById('user-input')! as HTMLInputElement
+
+// userInputElement.value = 'Hi';
+
+// // a flexible error container for form validation
+// interface ErrorContainer  {
+//     [prop: string]: string;
+// }
+
+// const errorBag: ErrorContainer = {
+//     email: 'Not a valid email!',
+//     username: 'Must start with a valid capital character!'
+// }
