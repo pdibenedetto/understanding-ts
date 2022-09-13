@@ -1,116 +1,105 @@
-type Admin = {
-    name: string;
-    privileges: string[];
-};
+// const promise: Promise<string> = new Promise ((resolve, reject) => {
+//     setTimeout(() => {
+//         resolve('This is done!')
+//     }, 2000);
+// });
 
-type Employee = {
-    name : string;
-    startDate: Date;
-};
+// promise.then(date =>  {
+//     // data gets the type of the generic specified above
+// })
 
-type ElevatedEmployee = Admin & Employee;
+function merge<T extends object, U extends object>(objA: T, objB: U) {
+    return Object.assign(objA, objB);
+}
 
-const elevatedEmployee = {
-    name: 'Paul',
-    priviliges: ['aws-ec2'],
-    startDate: new Date()
-};
+const mergedObj =  merge({name: 'Paul'}, {age: 38})
+console.log(mergedObj)
 
-type Combinable1 = string | number;
-type Numeric = number | boolean;
+// Now you can access the properties on the mergedObj 
 
-type Universal = Combinable1 & Numeric;
 
-// Function overload
-function add1(a: string, b: string): string
-function add1(a: number, b: number): number
-function add1(a: Combinable1, b: Combinable1) {
-    if(typeof a ==='string' || typeof b === 'string'){      // type guard example        
-        return a.toString() + b.toString();
+
+interface Lengthy {
+    length: number;
+}
+
+function countAndDescribe<T extends Lengthy>(element: T): [T, string] {
+    let descriptionText = 'Got no value.';
+    if (element.length === 1) {
+        descriptionText = 'Got 1 element.';
+    } else if (element.length > 1) {
+        descriptionText = 'Got ' + element.length + ' elements.';
     }
-    return a + b;
+    return [element, descriptionText];
 }
 
-// Function overloads helps infer the type returned by the method
-const result = add1('Paul', ' DiBenedetto')
-result.split(' ')
+console.log(countAndDescribe('Hi there!'));
+
+console.log(countAndDescribe(['Sports','Cooking']));
 
 
-// Optional Chaining
-const fetchedUserData = {
-    id: 'u1',
-    name: 'Paul',
-    job: {title: 'CEO', description: 'My own company'}
+// function extractAndConvert(obj: object, key: string) {
+//     return 'Value: ' + obj[key];
+// }
+
+// app.ts:42:24 - error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{}'.
+//   No index signature with a parameter of type 'string' was found on type '{}'.
+
+// 42     return 'Value: ' + obj[key];
+
+function extractAndConvert<T extends Object, U extends keyof T>(obj: T, key: U) {
+    return 'Value: ' + obj[key];
 }
 
-// Vanilla javascript checking
-// console.log(fetchedUserData.job && fetchedUserData.job.title)
+// extractAndConvert({}, 'name');
 
-console.log(fetchedUserData?.job?.title)
+// app.ts:54:23 - error TS2345: Argument of type 'string' is not assignable to parameter of type 'never'.
 
-// Nullish data - Nullish Coalescing
+// 54 extractAndConvert({}, 'name');
 
-// const uInput = '';
-// const storedData = userInput || 'Default';
-// console.log(storedData); // this will go to the 'Default'
-
-const uInput = '';
-const storedData = userInput ?? 'Default';
-console.log(storedData); 
+extractAndConvert({name: 'Paul'}, 'name');
 
 
 
+class DataStorage<T extends string | number | boolean> {
+    private data: T[] = [];
+
+    addItem(item: T) {
+        this.data.push(item)
+    }
+
+    // JavaScript - system by reference , fix for objects 
+    removeItem(item: T) {
+        if (this.data.indexOf(item) === -1) {
+            return;
+        }
+        this.data.splice(this.data.indexOf(item), 1);
+    }
+
+    getItems() {
+        return [...this.data];
+    }
+}
+
+const textStorage = new DataStorage<string>();
+textStorage.addItem('Paul');
+textStorage.addItem('John');
+console.log(textStorage.getItems());
+textStorage.removeItem('Paul');
+console.log(textStorage.getItems());
 
 
+// const objStorage = new DataStorage<object>();
+// objStorage.addItem({name: 'Paul'});
+// objStorage.addItem({name: 'John'});
+// console.log(objStorage.getItems());
+// objStorage.removeItem({name: 'Paul'});
+// console.log(objStorage.getItems()); 
 
-// type UnknownEmployee = Employee | Admin;
 
-// function printEmployeeInformation(emp: UnknownEmployee) {
-//     console.log('Name: ' + emp.name);
-//     if('privileges' in emp){
-//         console.log('Privileges : ' + emp.privileges)
-//     }
-// }
-
-// interface Bird {
-//     type: 'bird';
-//     flyingSpeed: number;
-// }
-
-// interface Horse {
-//     type: 'horse';
-//     runningSpeed: number
-// }
-
-// type Animal = Bird | Horse;
-
-// function moveAnimal(animal: Animal) {
-//     let speed;
-//     switch(animal.type) {
-//         case 'bird' :
-//             speed = animal.flyingSpeed;
-//             break;
-//         case 'horse' :
-//             speed = animal.runningSpeed;
-//             break;
-//     }
-//     console.log('Moving at speed: ' + speed);
-// }
-
-// moveAnimal({type: 'bird', flyingSpeed: 10})
-
-// // const userInputElement = <HTMLInputElement>document.getElementById('user-input');
-// // or
-// const userInputElement = document.getElementById('user-input')! as HTMLInputElement
-
-// userInputElement.value = 'Hi';
-
-// // a flexible error container for form validation
-// interface ErrorContainer  {
-//     [prop: string]: string;
-// }
-
-// const errorBag: ErrorContainer = {
-//     email: 'Not a valid email!',
-//     username: 'Must start with a valid capital character!'
-// }
+// const objFixStorage = new DataStorage<object>();
+// objStorage.addItem({name: 'Paul'});
+// objStorage.addItem({name: 'John'});
+// console.log(objStorage.getItems());
+// objStorage.removeItem({name: 'Paul'});
+// console.log(objStorage.getItems()); 
