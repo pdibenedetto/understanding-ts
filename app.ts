@@ -9,34 +9,31 @@
 // })
 
 function merge<T extends object, U extends object>(objA: T, objB: U) {
-    return Object.assign(objA, objB);
+  return Object.assign(objA, objB);
 }
 
-const mergedObj =  merge({name: 'Paul'}, {age: 38})
-console.log(mergedObj)
+const mergedObj = merge({ name: "Paul" }, { age: 38 });
+console.log(mergedObj);
 
-// Now you can access the properties on the mergedObj 
-
-
+// Now you can access the properties on the mergedObj
 
 interface Lengthy {
-    length: number;
+  length: number;
 }
 
 function countAndDescribe<T extends Lengthy>(element: T): [T, string] {
-    let descriptionText = 'Got no value.';
-    if (element.length === 1) {
-        descriptionText = 'Got 1 element.';
-    } else if (element.length > 1) {
-        descriptionText = 'Got ' + element.length + ' elements.';
-    }
-    return [element, descriptionText];
+  let descriptionText = "Got no value.";
+  if (element.length === 1) {
+    descriptionText = "Got 1 element.";
+  } else if (element.length > 1) {
+    descriptionText = "Got " + element.length + " elements.";
+  }
+  return [element, descriptionText];
 }
 
-console.log(countAndDescribe('Hi there!'));
+console.log(countAndDescribe("Hi there!"));
 
-console.log(countAndDescribe(['Sports','Cooking']));
-
+console.log(countAndDescribe(["Sports", "Cooking"]));
 
 // function extractAndConvert(obj: object, key: string) {
 //     return 'Value: ' + obj[key];
@@ -47,8 +44,11 @@ console.log(countAndDescribe(['Sports','Cooking']));
 
 // 42     return 'Value: ' + obj[key];
 
-function extractAndConvert<T extends Object, U extends keyof T>(obj: T, key: U) {
-    return 'Value: ' + obj[key];
+function extractAndConvert<T extends Object, U extends keyof T>(
+  obj: T,
+  key: U
+) {
+  return "Value: " + obj[key];
 }
 
 // extractAndConvert({}, 'name');
@@ -57,49 +57,77 @@ function extractAndConvert<T extends Object, U extends keyof T>(obj: T, key: U) 
 
 // 54 extractAndConvert({}, 'name');
 
-extractAndConvert({name: 'Paul'}, 'name');
-
-
+extractAndConvert({ name: "Paul" }, "name");
 
 class DataStorage<T extends string | number | boolean> {
-    private data: T[] = [];
+  private data: T[] = [];
 
-    addItem(item: T) {
-        this.data.push(item)
-    }
+  addItem(item: T) {
+    this.data.push(item);
+  }
 
-    // JavaScript - system by reference , fix for objects 
-    removeItem(item: T) {
-        if (this.data.indexOf(item) === -1) {
-            return;
-        }
-        this.data.splice(this.data.indexOf(item), 1);
+  // JavaScript - system by reference , fix for objects
+  removeItem(item: T) {
+    if (this.data.indexOf(item) === -1) {
+      return;
     }
+    this.data.splice(this.data.indexOf(item), 1);
+  }
 
-    getItems() {
-        return [...this.data];
-    }
+  getItems() {
+    return [...this.data];
+  }
 }
 
 const textStorage = new DataStorage<string>();
-textStorage.addItem('Paul');
-textStorage.addItem('John');
+textStorage.addItem("Paul");
+textStorage.addItem("John");
 console.log(textStorage.getItems());
-textStorage.removeItem('Paul');
+textStorage.removeItem("Paul");
 console.log(textStorage.getItems());
-
 
 // const objStorage = new DataStorage<object>();
 // objStorage.addItem({name: 'Paul'});
 // objStorage.addItem({name: 'John'});
 // console.log(objStorage.getItems());
 // objStorage.removeItem({name: 'Paul'});
-// console.log(objStorage.getItems()); 
-
+// console.log(objStorage.getItems());
 
 // const objFixStorage = new DataStorage<object>();
 // objStorage.addItem({name: 'Paul'});
 // objStorage.addItem({name: 'John'});
 // console.log(objStorage.getItems());
 // objStorage.removeItem({name: 'Paul'});
-// console.log(objStorage.getItems()); 
+// console.log(objStorage.getItems());
+
+// Lecture 101: Generic Utility Types
+
+interface CourseGoal {
+  title: String;
+  description: string;
+  completeUntil: Date;
+}
+
+function createCourseGoal(
+  title: string,
+  description: string,
+  date: Date
+): CourseGoal {
+    // return {title: title, description: description, completeUntil: date};
+    // or
+    // let courseGoal = {};             // This works in vanilla javascript but complains in ts
+    // courseGoal.title = title;
+    // courseGoal.description = description;
+    // courseGoal.completeUntil = date;
+
+    let courseGoal: Partial<CourseGoal> = {};
+    courseGoal.title = title;
+    courseGoal.description = description;
+    courseGoal.completeUntil = date;
+
+    return courseGoal as CourseGoal;
+}
+
+const names: Readonly<string []> = ['Paul', 'Johanna'];
+names.push('Max');
+names.pop();

@@ -10,20 +10,20 @@
 function merge(objA, objB) {
     return Object.assign(objA, objB);
 }
-const mergedObj = merge({ name: 'Paul' }, { age: 38 });
+const mergedObj = merge({ name: "Paul" }, { age: 38 });
 console.log(mergedObj);
 function countAndDescribe(element) {
-    let descriptionText = 'Got no value.';
+    let descriptionText = "Got no value.";
     if (element.length === 1) {
-        descriptionText = 'Got 1 element.';
+        descriptionText = "Got 1 element.";
     }
     else if (element.length > 1) {
-        descriptionText = 'Got ' + element.length + ' elements.';
+        descriptionText = "Got " + element.length + " elements.";
     }
     return [element, descriptionText];
 }
-console.log(countAndDescribe('Hi there!'));
-console.log(countAndDescribe(['Sports', 'Cooking']));
+console.log(countAndDescribe("Hi there!"));
+console.log(countAndDescribe(["Sports", "Cooking"]));
 // function extractAndConvert(obj: object, key: string) {
 //     return 'Value: ' + obj[key];
 // }
@@ -31,12 +31,12 @@ console.log(countAndDescribe(['Sports', 'Cooking']));
 //   No index signature with a parameter of type 'string' was found on type '{}'.
 // 42     return 'Value: ' + obj[key];
 function extractAndConvert(obj, key) {
-    return 'Value: ' + obj[key];
+    return "Value: " + obj[key];
 }
 // extractAndConvert({}, 'name');
 // app.ts:54:23 - error TS2345: Argument of type 'string' is not assignable to parameter of type 'never'.
 // 54 extractAndConvert({}, 'name');
-extractAndConvert({ name: 'Paul' }, 'name');
+extractAndConvert({ name: "Paul" }, "name");
 class DataStorage {
     constructor() {
         this.data = [];
@@ -44,7 +44,7 @@ class DataStorage {
     addItem(item) {
         this.data.push(item);
     }
-    // JavaScript - system by reference , fix for objects 
+    // JavaScript - system by reference , fix for objects
     removeItem(item) {
         if (this.data.indexOf(item) === -1) {
             return;
@@ -56,21 +56,25 @@ class DataStorage {
     }
 }
 const textStorage = new DataStorage();
-textStorage.addItem('Paul');
-textStorage.addItem('John');
+textStorage.addItem("Paul");
+textStorage.addItem("John");
 console.log(textStorage.getItems());
-textStorage.removeItem('Paul');
+textStorage.removeItem("Paul");
 console.log(textStorage.getItems());
-// const objStorage = new DataStorage<object>();
-// objStorage.addItem({name: 'Paul'});
-// objStorage.addItem({name: 'John'});
-// console.log(objStorage.getItems());
-// objStorage.removeItem({name: 'Paul'});
-// console.log(objStorage.getItems()); 
-// const objFixStorage = new DataStorage<object>();
-// objStorage.addItem({name: 'Paul'});
-// objStorage.addItem({name: 'John'});
-// console.log(objStorage.getItems());
-// objStorage.removeItem({name: 'Paul'});
-// console.log(objStorage.getItems()); 
+function createCourseGoal(title, description, date) {
+    // return {title: title, description: description, completeUntil: date};
+    // or
+    // let courseGoal = {};             // This works in vanilla javascript but complains in ts
+    // courseGoal.title = title;
+    // courseGoal.description = description;
+    // courseGoal.completeUntil = date;
+    let courseGoal = {};
+    courseGoal.title = title;
+    courseGoal.description = description;
+    courseGoal.completeUntil = date;
+    return courseGoal;
+}
+const names = ['Paul', 'Johanna'];
+names.push('Max');
+names.pop();
 //# sourceMappingURL=app.js.map
